@@ -1,7 +1,6 @@
 import superagentPromise from 'superagent-promise';
 import _superagent from 'superagent';
-import app from './stores/app';
-import auth from './stores/auth';
+import { app, auth } from '../mobx';
 const superagent = superagentPromise(_superagent, global.Promise);
 
 const API_ROOT = 'api/v1/';

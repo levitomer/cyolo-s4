@@ -1,3 +1,3 @@
-export default function File() {
+export default function File({ file, onShare, onDelete }) {
     return <div>File</div>;
 }

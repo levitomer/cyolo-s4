@@ -1,9 +1,10 @@
 import { observable, action } from 'mobx';
-import agent from '../agent';
-import user from './user';
-import app from './app';
+import { Auth as api } from '../api/Auth';
+import user from './User';
+import app from './App';
+import { AuthInterface } from 'interfaces/Auth';
 
-class AuthStore {
+class AuthStore implements AuthInterface {
     @observable inProgress = false;
     @observable errors = undefined;
 
@@ -13,15 +14,15 @@ class AuthStore {
         password: '',
     };
 
-    @action setUsername(username) {
+    @action setUsername(username: string) {
         this.values.username = username;
     }
 
-    @action setEmail(email) {
+    @action setEmail(email: string) {
         this.values.email = email;
     }
 
-    @action setPassword(password) {
+    @action setPassword(password: string) {
         this.values.password = password;
     }
 
@@ -34,7 +35,8 @@ class AuthStore {
     @action login() {
         this.inProgress = true;
         this.errors = undefined;
-        return agent.Auth.login(this.values.email, this.values.password)
+        return api
+            .login(this.values.email)
             .then(({ user }) => app.setToken(user.token))
             .then(() => user.pullUser())
             .catch(
@@ -56,11 +58,8 @@ class AuthStore {
     @action register() {
         this.inProgress = true;
         this.errors = undefined;
-        return agent.Auth.register(
-            this.values.username,
-            this.values.email,
-            this.values.password
-        )
+        return api
+            .register(this.values.username)
             .then(({ user }) => app.setToken(user.token))
             .then(() => user.pullUser())
             .catch(
@@ -80,8 +79,8 @@ class AuthStore {
     }
 
     @action logout() {
-        app.setToken(undefined);
-        user.forgetUser();
+        app.setToken('');
+        user.logout();
         return Promise.resolve();
     }
 }

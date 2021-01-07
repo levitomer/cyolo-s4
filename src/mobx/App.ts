@@ -1,7 +1,8 @@
 import { observable, action, reaction } from 'mobx';
+import { AppInterface } from '../interfaces/App';
 
-class AppStore {
-    @observable appName = 'Cyolo S4';
+class AppStore implements AppInterface {
+    appName = 'Cyolo S4';
     @observable token = window.localStorage.getItem('jwt');
     @observable appLoaded = false;
 
@@ -18,11 +19,11 @@ class AppStore {
         );
     }
 
-    @action setToken(token) {
+    @action setToken(token: string): void {
         this.token = token;
     }
 
-    @action setAppLoaded() {
+    @action setAppLoaded(): void {
         this.appLoaded = true;
     }
 }

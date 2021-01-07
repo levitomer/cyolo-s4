@@ -1,11 +1,6 @@
-import user from './user';
-import auth from './auth';
-import app from './app';
-import files from './files';
+import auth from './Auth';
+import app from './App';
+import registry from './Registry';
+import user from './User';
 
-export default {
-    app,
-    auth,
-    files,
-    user,
-};
+export { auth, app, registry, user };

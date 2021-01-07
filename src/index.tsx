@@ -1,12 +1,11 @@
-import ReactDOM from 'react-dom';
 import React from 'react';
-import { Provider } from 'mobx-react';
+import ReactDOM from 'react-dom';
 import App from './observers/App';
-import * as stores from './mobx';
+import { app, user } from './mobx';
 
 ReactDOM.render(
-    <Provider {...stores}>
-        <App />
-    </Provider>,
+    <React.StrictMode>
+        <App app={app} user={user} />
+    </React.StrictMode>,
     document.getElementById('root')
 );

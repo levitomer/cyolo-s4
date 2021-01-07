@@ -1,15 +1,17 @@
 import { observable, action } from 'mobx';
-import agent from '../agent';
+import { Auth as api } from '../api/Auth';
+import { UserInterface } from '../interfaces/User';
 
-class UserStore {
-    @observable currentUser;
-    @observable loadingUser;
-    @observable updatingUser;
-    @observable updatingUserErrors;
+class UserStore implements UserInterface {
+    @observable currentUser: any;
+    @observable updatingUserErrors: any;
+    @observable loadingUser: boolean = false;
+    @observable updatingUser: boolean = false;
 
     @action pullUser() {
         this.loadingUser = true;
-        return agent.Auth.current()
+        return api
+            .current()
             .then(
                 action(({ user }) => {
                     this.currentUser = user;
@@ -24,7 +26,8 @@ class UserStore {
 
     @action updateUser(newUser) {
         this.updatingUser = true;
-        return agent.Auth.save(newUser)
+        return api
+            .save(newUser)
             .then(
                 action(({ user }) => {
                     this.currentUser = user;
@@ -37,7 +40,7 @@ class UserStore {
             );
     }
 
-    @action forgetUser() {
+    @action logout(): void {
         this.currentUser = undefined;
     }
 }

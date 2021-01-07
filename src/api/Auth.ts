@@ -1,4 +1,4 @@
-import requests from './';
+import requests from '.';
 
 export const Auth = {
     current: () => requests.get('/user'),

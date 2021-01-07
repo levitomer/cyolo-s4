@@ -1,19 +1,27 @@
 import React from 'react';
 import logo from '../assets/logo.png';
 import Login from './Login';
-import Files from './Files';
+import Registry from './Registry';
 import { observer } from 'mobx-react';
+import { registry, auth } from '../mobx';
+import { AppInterface } from '../interfaces/App';
+import { UserInterface } from '../interfaces/User';
 
-function App({ auth, user }) {
+interface IProps {
+    app: AppInterface;
+    user: UserInterface;
+}
+
+const App: React.FC<IProps> = ({ app, user }: IProps): JSX.Element => {
     React.useEffect(() => {
-        if (!auth.token) {
-            auth.setAppLoaded();
+        if (!app.token) {
+            app.setAppLoaded();
         }
 
-        if (auth.token) {
-            user.pullUser().finally(() => auth.setAppLoaded());
+        if (app.token) {
+            user.pullUser().finally(() => app.setAppLoaded());
         }
-    }, [auth, user]);
+    }, [app, user]);
 
     return (
         <div>
@@ -21,9 +29,13 @@ function App({ auth, user }) {
             <p>
                 Super Simplistic Storage Solution™ <code>{`{S4}`}</code>
             </p>
-            {auth.token ? <Files /> : <Login />}
+            {app.token ? (
+                <Registry registry={registry} />
+            ) : (
+                <Login auth={auth} />
+            )}
         </div>
     );
-}
+};
 
 export default observer(App);
